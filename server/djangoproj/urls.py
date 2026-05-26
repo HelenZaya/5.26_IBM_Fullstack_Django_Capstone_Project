@@ -8,4 +8,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('djangoapp/', include('djangoapp.urls')),
     path('', TemplateView.as_view(template_name='index.html')),
+    path('about/', TemplateView.as_view(template_name='about.html')),
+    path('contact/', TemplateView.as_view(template_name='contact.html')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

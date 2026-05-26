@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us — Cars Dealership</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root[data-theme="dark"] {
+            --bg: #0f0f1a; --bg2: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
+            --text: #ffffff; --text-muted: rgba(255,255,255,0.5); --nav-bg: rgba(15,15,26,0.9);
+        }
+        :root[data-theme="light"] {
+            --bg: #f0f2ff; --bg2: rgba(99,102,241,0.06); --border: rgba(99,102,241,0.15);
+            --text: #1e1b4b; --text-muted: rgba(30,27,75,0.55); --nav-bg: rgba(240,242,255,0.92);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
+        .navbar { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 16px 60px; background: var(--nav-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .navbar-brand { font-size: 1.3rem; font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo-text { background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; gap: 32px; }
+        .nav-link { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text); }
+        .back-btn { padding: 8px 18px; border-radius: 10px; border: 1.5px solid rgba(99,102,241,0.4); color: #a78bfa; background: transparent; font-weight: 600; font-size: 0.85rem; text-decoration: none; }
+        .page { padding: 110px 60px 80px; max-width: 1100px; margin: 0 auto; }
+        .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: #a78bfa; margin-bottom: 20px; }
+        .page-title { font-size: 3rem; font-weight: 900; margin-bottom: 16px; line-height: 1.1; }
+        .page-title span { background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-sub { color: var(--text-muted); font-size: 1.05rem; max-width: 600px; line-height: 1.7; margin-bottom: 60px; }
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-bottom: 60px; }
+        .team-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 24px; padding: 32px; text-align: center; transition: all 0.35s; animation: fadeInUp 0.5s ease both; }
+        .team-card:hover { transform: translateY(-6px); border-color: rgba(99,102,241,0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.25); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a78bfa); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: white; }
+        .member-name { font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; }
+        .member-role { color: #a78bfa; font-size: 0.85rem; font-weight: 600; margin-bottom: 12px; }
+        .member-bio { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+        .values-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 24px; padding: 48px; position: relative; overflow: hidden; }
+        .values-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #6366f1, #a78bfa, #f59e0b); }
+        .values-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 32px; }
+        .values-title span { background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+        .value-item { display: flex; flex-direction: column; gap: 10px; }
+        .value-icon { font-size: 2rem; }
+        .value-name { font-size: 1rem; font-weight: 700; }
+        .value-desc { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <a class="navbar-brand" href="/">
+        <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="lg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient></defs>
+            <rect x="4" y="22" width="40" height="14" rx="5" fill="url(#lg)"/>
+            <path d="M10 22 Q13 12 18 10 L30 10 Q35 12 38 22 Z" fill="url(#lg)" opacity="0.85"/>
+            <ellipse cx="15" cy="36" rx="6" ry="6" fill="#1e1b4b" stroke="#a78bfa" stroke-width="2"/>
+            <ellipse cx="15" cy="36" rx="3" ry="3" fill="#6366f1"/>
+            <ellipse cx="33" cy="36" rx="6" ry="6" fill="#1e1b4b" stroke="#a78bfa" stroke-width="2"/>
+            <ellipse cx="33" cy="36" rx="3" ry="3" fill="#6366f1"/>
+        </svg>
+        <span class="logo-text">Cars Dealership</span>
+    </a>
+    <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/about/" class="nav-link">About</a>
+        <a href="/contact/" class="nav-link">Contact</a>
+    </div>
+    <a href="/" class="back-btn">← Back</a>
+</nav>
+
+<div class="page">
+    <div class="hero-tag">👥 Our Story</div>
+    <h1 class="page-title">Meet the <span>Team</span> Behind Cars Dealership</h1>
+    <p class="page-sub">We're a passionate team of automotive enthusiasts and tech innovators committed to connecting buyers with the best dealerships across America.</p>
+
+    <div class="team-grid">
+        <div class="team-card" style="animation-delay:0s">
+            <div class="avatar">S</div>
+            <div class="member-name">Sarah Johnson</div>
+            <div class="member-role">Chief Executive Officer</div>
+            <div class="member-bio">15+ years in automotive industry. Sarah founded Cars Dealership with a vision to modernize how Americans shop for vehicles.</div>
+        </div>
+        <div class="team-card" style="animation-delay:0.1s">
+            <div class="avatar">M</div>
+            <div class="member-name">Michael Chen</div>
+            <div class="member-role">Chief Technology Officer</div>
+            <div class="member-bio">Full-stack engineer with expertise in scalable platforms. Michael leads our engineering team building the technology behind our dealership network.</div>
+        </div>
+        <div class="team-card" style="animation-delay:0.2s">
+            <div class="avatar">E</div>
+            <div class="member-name">Emily Davis</div>
+            <div class="member-role">Head of Customer Experience</div>
+            <div class="member-bio">Dedicated to ensuring every customer finds their perfect vehicle. Emily oversees our dealer partnerships and customer satisfaction programs.</div>
+        </div>
+    </div>
+
+    <div class="values-section">
+        <div class="values-title">Our <span>Core Values</span></div>
+        <div class="values-grid">
+            <div class="value-item"><div class="value-icon">🤝</div><div class="value-name">Trust</div><div class="value-desc">Every dealership on our platform is verified and reviewed by real customers.</div></div>
+            <div class="value-item"><div class="value-icon">🚀</div><div class="value-name">Innovation</div><div class="value-desc">We constantly improve our platform to deliver the best car-buying experience.</div></div>
+            <div class="value-item"><div class="value-icon">🌍</div><div class="value-name">Community</div><div class="value-desc">Supporting local dealerships and connecting them with buyers across America.</div></div>
+            <div class="value-item"><div class="value-icon">⭐</div><div class="value-name">Excellence</div><div class="value-desc">We hold our partners to the highest standards of service and transparency.</div></div>
+        </div>
+    </div>
+</div>
+<script>
+const saved = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', saved);
+</script>
+</body>
+</html>
