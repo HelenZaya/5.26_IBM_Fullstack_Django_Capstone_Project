@@ -27,7 +27,9 @@
             animation: slideDown 0.6s ease;
         }
         @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .navbar-brand { font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .navbar-brand { font-size: 1.4rem; font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo-icon { vertical-align: middle; }
+        .logo-text { background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-links { display: flex; align-items: center; gap: 32px; }
         .nav-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
         .nav-link:hover { color: white; }
@@ -43,8 +45,8 @@
 
         /* HERO */
         .hero {
-            min-height: 100vh; display: flex; align-items: center;
-            padding: 120px 80px 60px;
+            display: flex; align-items: center;
+            padding: 110px 80px 50px;
             position: relative; overflow: hidden;
         }
         .hero-inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; width: 100%; max-width: 1200px; margin: 0 auto; }
@@ -172,7 +174,24 @@
 
 <!-- NAVBAR -->
 <nav class="navbar">
-    <a class="navbar-brand" href="/">🚗 Cars Dealership</a>
+    <a class="navbar-brand" href="/">
+        <svg class="logo-icon" width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="logoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#6366f1"/>
+                    <stop offset="100%" stop-color="#a78bfa"/>
+                </linearGradient>
+            </defs>
+            <rect x="4" y="22" width="40" height="14" rx="5" fill="url(#logoGrad)"/>
+            <path d="M10 22 Q13 12 18 10 L30 10 Q35 12 38 22 Z" fill="url(#logoGrad)" opacity="0.85"/>
+            <ellipse cx="15" cy="36" rx="6" ry="6" fill="#1e1b4b" stroke="#a78bfa" stroke-width="2"/>
+            <ellipse cx="15" cy="36" rx="3" ry="3" fill="#6366f1"/>
+            <ellipse cx="33" cy="36" rx="6" ry="6" fill="#1e1b4b" stroke="#a78bfa" stroke-width="2"/>
+            <ellipse cx="33" cy="36" rx="3" ry="3" fill="#6366f1"/>
+            <rect x="20" y="14" width="10" height="8" rx="2" fill="rgba(147,197,253,0.35)"/>
+        </svg>
+        <span class="logo-text">Cars Dealership</span>
+    </a>
     <div class="nav-links">
         <a href="/" class="nav-link">Home</a>
         <a href="/server/frontend/static/About.html" class="nav-link">About</a>
