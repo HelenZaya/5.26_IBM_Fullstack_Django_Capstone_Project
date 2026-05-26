@@ -1,0 +1,13 @@
+{
+  "name": "cars-dealership-server",
+  "version": "1.0.0",
+  "description": "Cars Dealership Full Stack Application",
+  "scripts": {
+    "start": "node database/app.js",
+    "build": "cd frontend && npm install && npm run build"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cars-dealership-django
+  labels:
+    app: cars-dealership
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cars-dealership
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: cars-dealership
+        tier: backend
+    spec:
+      containers:
+        - name: django-app
+          image: us.icr.io/sn-labs-buyanzaya/cars-dealership:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: djangoproj.settings
+            - name: backend_url
+              value: http://dealer-db-service:3030
+            - name: sentiment_analyzer_url
+              value: http://sentiment-service:5050
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cars-dealership-service
+spec:
+  selector:
+    app: cars-dealership
+    tier: backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dealer-database
+  labels:
+    app: dealer-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dealer-db
+  template:
+    metadata:
+      labels:
+        app: dealer-db
+    spec:
+      containers:
+        - name: dealer-db
+          image: us.icr.io/sn-labs-buyanzaya/dealer-database:latest
+          ports:
+            - containerPort: 3030
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dealer-db-service
+spec:
+  selector:
+    app: dealer-db
+  ports:
+    - protocol: TCP
+      port: 3030
+      targetPort: 3030
+  type: ClusterIP

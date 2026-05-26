@@ -1,0 +1,89 @@
+name: CI/CD Pipeline - Cars Dealership
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-python:
+    name: Lint Python Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install flake8 pylint
+          pip install -r server/requirements.txt
+
+      - name: Run flake8 linter
+        run: |
+          flake8 server/djangoapp/ server/djangoproj/ --max-line-length=120 --ignore=E501,W503 --exclude=migrations,__pycache__
+        continue-on-error: true
+
+      - name: Run pylint
+        run: |
+          pylint server/djangoapp/ --disable=C0111,R0903,W0611 --ignore=migrations --max-line-length=120 --output-format=text
+        continue-on-error: true
+
+  lint-node:
+    name: Lint Node.js Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install ESLint
+        run: npm install -g eslint
+
+      - name: Run ESLint on database service
+        run: |
+          eslint server/database/app.js --no-eslintrc --rule '{"no-console": "warn", "semi": ["error","always"]}'
+        continue-on-error: true
+
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    needs: [lint-python, lint-node]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install -r server/requirements.txt
+
+      - name: Run Django migrations check
+        run: |
+          cd server
+          python manage.py check
+        env:
+          DJANGO_SETTINGS_MODULE: djangoproj.settings
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Node dependencies
+        run: cd server/database && npm install
+
+      - name: Build success
+        run: echo "Build completed successfully!"

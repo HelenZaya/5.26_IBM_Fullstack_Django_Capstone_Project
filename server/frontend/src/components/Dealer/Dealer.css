@@ -1,0 +1,16 @@
+.dealer-detail-container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+.dealer-info-card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 24px; }
+.dealer-info-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.dealer-info-header h1 { font-size: 1.8rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+.dealer-info-header p { color: #6b7280; margin: 4px 0; }
+.dealer-rating-badge { font-size: 1.5rem; font-weight: 700; color: #f59e0b; }
+.post-review-link { display: inline-block; margin-top: 16px; padding: 10px 20px; background: #198754; color: white; border-radius: 8px; text-decoration: none; font-weight: 600; }
+.reviews-section h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; color: #1a1a2e; }
+.review-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+.review-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+.reviewer-name { font-weight: 700; color: #1a1a2e; }
+.sentiment { font-size: 0.9rem; color: #6b7280; }
+.review-text { color: #374151; margin-bottom: 12px; line-height: 1.6; }
+.review-meta { display: flex; gap: 20px; font-size: 0.85rem; color: #9ca3af; }
+.no-reviews { color: #9ca3af; font-style: italic; }
+.loading { text-align: center; padding: 60px; color: #6b7280; }

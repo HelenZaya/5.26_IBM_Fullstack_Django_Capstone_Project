@@ -1,0 +1,16 @@
+.post-review-container { max-width: 600px; margin: 40px auto; padding: 20px; }
+.post-review-card { background: white; border-radius: 16px; padding: 36px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.post-review-card h1 { font-size: 1.8rem; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+.subtitle { color: #6b7280; margin-bottom: 28px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 6px; color: #374151; }
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 8px;
+    font-size: 0.95rem; box-sizing: border-box; }
+.form-group textarea { resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-actions { display: flex; gap: 12px; margin-top: 8px; }
+.cancel-btn { flex: 1; padding: 12px; border: 1.5px solid #ddd; border-radius: 8px; background: white; cursor: pointer; font-weight: 600; }
+.submit-btn { flex: 2; padding: 12px; background: #0d6efd; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.success-card { background: white; border-radius: 16px; padding: 60px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.success-card h2 { color: #198754; font-size: 1.8rem; }
