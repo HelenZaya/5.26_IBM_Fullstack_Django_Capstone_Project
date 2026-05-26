@@ -41,16 +41,16 @@
         .nav-link { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
         .nav-link:hover { color: var(--text); }
 
-        /* THEME TOGGLE */
-        .theme-toggle { width: 40px; height: 22px; background: rgba(99,102,241,0.25); border: 1.5px solid rgba(99,102,241,0.4); border-radius: 11px; cursor: pointer; position: relative; transition: background 0.3s; flex-shrink: 0; }
-        .theme-toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: #6366f1; border-radius: 50%; transition: transform 0.3s; }
-        [data-theme="light"] .theme-toggle { background: rgba(99,102,241,0.35); }
-        [data-theme="light"] .theme-toggle::after { transform: translateX(18px); background: #4f46e5; }
-        .theme-icon { font-size: 0.85rem; }
+        /* THEME FLOATING BUTTON - top right corner */
+        .theme-float { position: fixed; top: 14px; right: 16px; z-index: 2000; width: 42px; height: 42px; border-radius: 50%; border: 2px solid rgba(99,102,241,0.5); background: rgba(15,15,26,0.9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); cursor: pointer; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; transition: all 0.25s; box-shadow: 0 4px 16px rgba(99,102,241,0.25); }
+        .theme-float:hover { transform: scale(1.15) rotate(15deg); box-shadow: 0 6px 24px rgba(99,102,241,0.45); border-color: #6366f1; }
+        [data-theme="light"] .theme-float { background: rgba(238,240,255,0.95); border-color: #6366f1; }
 
         /* LANGUAGE SELECTOR */
-        .lang-select { padding: 6px 10px; border-radius: 10px; border: 1.5px solid rgba(99,102,241,0.35); background: rgba(99,102,241,0.1); color: var(--text); font-size: 0.82rem; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; outline: none; }
-        [data-theme="light"] .lang-select { background: rgba(99,102,241,0.12); color: #1e1b4b; }
+        .lang-select { padding: 7px 8px; border-radius: 10px; border: 1.5px solid rgba(99,102,241,0.55); background: #1a1535; color: #c4b5fd; font-size: 0.8rem; font-weight: 700; font-family: 'Inter', sans-serif; cursor: pointer; outline: none; max-width: 145px; }
+        .lang-select option { background: #1a1535; color: #ddd6fe; font-weight: 600; padding: 4px; }
+        [data-theme="light"] .lang-select { background: #312e81; color: #e0d9ff; border-color: #6366f1; }
+        [data-theme="light"] .lang-select option { background: #312e81; color: #e0d9ff; }
 
         .nav-actions { display: flex; align-items: center; gap: 10px; }
         .btn-login { padding: 8px 20px; border-radius: 10px; border: 1.5px solid rgba(99,102,241,0.5); color: #a78bfa; background: transparent; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; font-family: 'Inter', sans-serif; }
@@ -191,6 +191,9 @@
 </head>
 <body>
 
+<!-- THEME FLOAT BUTTON -->
+<button type="button" class="theme-float" onclick="toggleTheme()" id="themeBtn" title="Toggle dark/light mode">🌙</button>
+
 <!-- NAVBAR -->
 <nav class="navbar">
     <a class="navbar-brand" href="/">
@@ -218,13 +221,17 @@
     </div>
     <div class="nav-actions">
         <select class="lang-select" onchange="setLanguage(this.value)" id="langSelect" title="Select language" aria-label="Language selector">
+            <option value="mn">🇲🇳 Монгол</option>
             <option value="en">🇺🇸 English</option>
-            <option value="es">🇲🇽 Español</option>
-            <option value="zh">🇨🇳 中文</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="ja">🇯🇵 日本語</option>
             <option value="ko">🇰🇷 한국어</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="ru">🇷🇺 Русский</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="es">🇲🇽 Español</option>
         </select>
-        <span class="theme-icon" id="themeIcon">🌙</span>
-        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode"></div>
         <div id="guestActions">
             <div style="display:flex;gap:10px;">
                 <button class="btn-login" onclick="document.getElementById('loginModal').classList.add('show')">Login</button>
@@ -469,22 +476,27 @@ function toggleTheme() {
     const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
-    document.getElementById('themeIcon').textContent = next === 'dark' ? '🌙' : '☀️';
+    document.getElementById('themeBtn').textContent = next === 'dark' ? '🌙' : '☀️';
 }
 (function initTheme() {
     const saved = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', saved);
-    document.getElementById('themeIcon').textContent = saved === 'dark' ? '🌙' : '☀️';
+    document.getElementById('themeBtn').textContent = saved === 'dark' ? '🌙' : '☀️';
 })();
 
 // ── LANGUAGE ──
 const i18n = {
+    mn: { nav_home:'Нүүр', nav_about:'Бидний тухай', nav_contact:'Холбоо барих', hero_tag:'⚡ Америкийн #1 Дилерийн Сүлжээ', hero_title:'Улс даяар <span>Хамгийн Тохиромжтой Дилерийг</span> Олоорой', hero_sub:'500 гаруй найдвартай дилерийн газрыг үзэж, үнэ харьцуулж, сэтгэгдэл уншаарай.', btn_browse:'Дилерүүдийг харах', btn_join:'Үнэгүй нэгдэх', section_all:'Бүгд', section_dealers:'Дилерийн Газар', state_all:'Бүх муж', state_il:'Иллинойс', state_ks:'Канзас', state_tx:'Техас', state_ca:'Калифорни' },
     en: { nav_home:'Home', nav_about:'About', nav_contact:'Contact', hero_tag:'⚡ America\'s #1 Dealer Network', hero_title:'Find Your <span>Perfect Dealer</span> Across the Nation', hero_sub:'Browse 500+ trusted dealerships nationwide. Compare prices, read reviews, and drive away happy.', btn_browse:'Browse Dealers', btn_join:'Join Free', section_all:'All', section_dealers:'Dealerships', state_all:'All States', state_il:'Illinois', state_ks:'Kansas', state_tx:'Texas', state_ca:'California' },
-    es: { nav_home:'Inicio', nav_about:'Nosotros', nav_contact:'Contacto', hero_tag:'⚡ Red #1 de Concesionarios', hero_title:'Encuentra tu <span>Concesionario Perfecto</span> en Todo el País', hero_sub:'Explora más de 500 concesionarios de confianza. Compara precios, lee reseñas y maneja feliz.', btn_browse:'Ver Concesionarios', btn_join:'Únete Gratis', section_all:'Todos', section_dealers:'Concesionarios', state_all:'Todos los Estados', state_il:'Illinois', state_ks:'Kansas', state_tx:'Texas', state_ca:'California' },
+    de: { nav_home:'Startseite', nav_about:'Über uns', nav_contact:'Kontakt', hero_tag:'⚡ Amerikas Nr.1 Händlernetz', hero_title:'Finden Sie Ihren <span>perfekten Händler</span> in ganz Amerika', hero_sub:'Durchsuchen Sie 500+ vertrauenswürdige Händler. Preise vergleichen, Bewertungen lesen.', btn_browse:'Händler durchsuchen', btn_join:'Kostenlos beitreten', section_all:'Alle', section_dealers:'Autohändler', state_all:'Alle Bundesstaaten', state_il:'Illinois', state_ks:'Kansas', state_tx:'Texas', state_ca:'Kalifornien' },
+    ja: { nav_home:'ホーム', nav_about:'私たちについて', nav_contact:'お問い合わせ', hero_tag:'⚡ アメリカNo.1ディーラーネット', hero_title:'全国で<span>最高のディーラー</span>を見つけよう', hero_sub:'全国500以上の信頼できるディーラーを検索。価格比較、レビュー確認後、満足してドライブ。', btn_browse:'ディーラーを見る', btn_join:'無料登録', section_all:'すべて', section_dealers:'ディーラー', state_all:'全州', state_il:'イリノイ州', state_ks:'カンザス州', state_tx:'テキサス州', state_ca:'カリフォルニア州' },
+    ko: { nav_home:'홈', nav_about:'소개', nav_contact:'문의', hero_tag:'⚡ 미국 1위 딜러 네트워크', hero_title:'전국에서 <span>완벽한 딜러</span>를 찾아보세요', hero_sub:'전국 500개 이상의 신뢰할 수 있는 딜러십을 검색하세요. 가격 비교, 리뷰 확인.', btn_browse:'딜러 보기', btn_join:'무료 가입', section_all:'전체', section_dealers:'딜러십', state_all:'전체 주', state_il:'일리노이', state_ks:'캔자스', state_tx:'텍사스', state_ca:'캘리포니아' },
     zh: { nav_home:'首页', nav_about:'关于我们', nav_contact:'联系我们', hero_tag:'⚡ 美国第一经销商网络', hero_title:'在全国找到您的<span>完美经销商</span>', hero_sub:'浏览全国500多家值得信赖的经销商。比较价格，阅读评论，满意驾车而归。', btn_browse:'浏览经销商', btn_join:'免费加入', section_all:'全部', section_dealers:'经销商', state_all:'所有州', state_il:'伊利诺伊州', state_ks:'堪萨斯州', state_tx:'德克萨斯州', state_ca:'加利福尼亚州' },
-    ko: { nav_home:'홈', nav_about:'소개', nav_contact:'문의', hero_tag:'⚡ 미국 1위 딜러 네트워크', hero_title:'전국에서 <span>완벽한 딜러</span>를 찾아보세요', hero_sub:'전국 500개 이상의 신뢰할 수 있는 딜러십을 검색하세요. 가격 비교, 리뷰 확인 후 행복하게 드라이브하세요.', btn_browse:'딜러 보기', btn_join:'무료 가입', section_all:'전체', section_dealers:'딜러십', state_all:'전체 주', state_il:'일리노이', state_ks:'캔자스', state_tx:'텍사스', state_ca:'캘리포니아' }
+    ru: { nav_home:'Главная', nav_about:'О нас', nav_contact:'Контакты', hero_tag:'⚡ Дилерская сеть №1 в Америке', hero_title:'Найдите своего <span>идеального дилера</span> по всей стране', hero_sub:'Просматривайте 500+ проверенных автосалонов. Сравнивайте цены, читайте отзывы.', btn_browse:'Найти дилеров', btn_join:'Бесплатно', section_all:'Все', section_dealers:'Автосалоны', state_all:'Все штаты', state_il:'Иллинойс', state_ks:'Канзас', state_tx:'Техас', state_ca:'Калифорния' },
+    hi: { nav_home:'होम', nav_about:'हमारे बारे में', nav_contact:'संपर्क', hero_tag:'⚡ अमेरिका का #1 डीलर नेटवर्क', hero_title:'पूरे देश में <span>परफेक्ट डीलर</span> खोजें', hero_sub:'500+ विश्वसनीय डीलरशिप देखें। कीमतें तुलना करें, समीक्षाएं पढ़ें।', btn_browse:'डीलर देखें', btn_join:'मुफ्त जुड़ें', section_all:'सभी', section_dealers:'डीलरशिप', state_all:'सभी राज्य', state_il:'इलिनोइस', state_ks:'कैनसस', state_tx:'टेक्सास', state_ca:'कैलिफोर्निया' },
+    ar: { nav_home:'الرئيسية', nav_about:'من نحن', nav_contact:'اتصل بنا', hero_tag:'⚡ شبكة الوكلاء الأولى في أمريكا', hero_title:'ابحث عن <span>وكيلك المثالي</span> في جميع أنحاء البلاد', hero_sub:'تصفح أكثر من 500 وكالة موثوقة. قارن الأسعار واقرأ التقييمات.', btn_browse:'تصفح الوكلاء', btn_join:'انضم مجاناً', section_all:'الكل', section_dealers:'الوكالات', state_all:'جميع الولايات', state_il:'إلينوي', state_ks:'كانساس', state_tx:'تكساس', state_ca:'كاليفورنيا' },
+    es: { nav_home:'Inicio', nav_about:'Nosotros', nav_contact:'Contacto', hero_tag:'⚡ Red #1 de Concesionarios', hero_title:'Encuentra tu <span>Concesionario Perfecto</span> en Todo el País', hero_sub:'Explora más de 500 concesionarios de confianza. Compara precios, lee reseñas.', btn_browse:'Ver Concesionarios', btn_join:'Únete Gratis', section_all:'Todos', section_dealers:'Concesionarios', state_all:'Todos los Estados', state_il:'Illinois', state_ks:'Kansas', state_tx:'Texas', state_ca:'California' }
 };
-const stateLang = { Illinois:'en', Kansas:'es', Texas:'es', California:'zh' };
 
 function setLanguage(lang) {
     const t = i18n[lang] || i18n.en;
@@ -502,6 +514,7 @@ function setLanguage(lang) {
     const stateKeys = ['state_all','state_il','state_ks','state_tx','state_ca'];
     filterBtns.forEach((btn, i) => { if (stateKeys[i]) btn.textContent = t[stateKeys[i]] || btn.textContent; });
     document.querySelector('.section-title').innerHTML = `${t.section_all} <span>${t.section_dealers}</span>`;
+    document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
 }
 (function initLang() {
     const saved = localStorage.getItem('lang') || 'en';
