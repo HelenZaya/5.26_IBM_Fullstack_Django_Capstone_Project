@@ -76,6 +76,22 @@
         .spinner { width: 36px; height: 36px; border: 3px solid rgba(99,102,241,0.2); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .no-reviews { text-align: center; padding: 60px; color: rgba(255,255,255,0.35); }
+
+        /* CAR INVENTORY MARKETPLACE */
+        .inventory-section { margin-top: 56px; }
+        .inventory-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: rgba(255,255,255,0.9); }
+        .inventory-title span { background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .inv-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+        @media(max-width:1100px){.inv-grid{grid-template-columns:repeat(3,1fr);}}
+        @media(max-width:700px){.inv-grid{grid-template-columns:repeat(2,1fr);}}
+        .inv-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; transition: all 0.3s; animation: fadeInUp 0.5s ease both; }
+        .inv-card:hover { transform: translateY(-4px); border-color: rgba(99,102,241,0.3); box-shadow: 0 12px 32px rgba(0,0,0,0.35); }
+        .inv-img { width: 100%; height: 120px; object-fit: cover; display: block; }
+        .inv-body { padding: 12px 14px; }
+        .inv-name { font-size: 0.82rem; font-weight: 700; margin-bottom: 4px; }
+        .inv-sub { font-size: 0.72rem; color: rgba(255,255,255,0.45); margin-bottom: 8px; }
+        .inv-price { font-size: 0.9rem; font-weight: 800; color: #6366f1; }
+        .inv-fuel { display: inline-block; font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 8px; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.25); color: #a78bfa; float: right; margin-top: 2px; }
     </style>
 </head>
 <body>
@@ -97,6 +113,11 @@
     <div class="section-label">Customer <span>Reviews</span></div>
     <div id="reviewsList" class="reviews-list">
         <div class="loading"><div class="spinner"></div>Loading reviews...</div>
+    </div>
+
+    <div class="inventory-section">
+        <div class="inventory-title">Cars <span>Available at This Dealership</span></div>
+        <div class="inv-grid" id="invGrid"></div>
     </div>
 </div>
 
@@ -161,6 +182,53 @@ async function loadReviews() {
 
 loadDealer();
 loadReviews();
+
+// Car inventory for this dealer (sampled from marketplace)
+const allInventory = [
+    {make:'Toyota',model:'Camry',year:2023,type:'Sedan',price:28500,fuel:'Hybrid',img:'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400&h=120&fit=crop&auto=format'},
+    {make:'Honda',model:'CR-V',year:2023,type:'SUV',price:34200,fuel:'Gas',img:'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=400&h=120&fit=crop&auto=format'},
+    {make:'Ford',model:'Mustang',year:2023,type:'Coupe',price:42000,fuel:'Gas',img:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=120&fit=crop&auto=format'},
+    {make:'BMW',model:'3 Series',year:2023,type:'Sedan',price:47500,fuel:'Gas',img:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&h=120&fit=crop&auto=format'},
+    {make:'Toyota',model:'RAV4',year:2023,type:'SUV',price:32100,fuel:'Hybrid',img:'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400&h=120&fit=crop&auto=format'},
+    {make:'Ford',model:'F-150',year:2022,type:'Truck',price:45000,fuel:'Gas',img:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=120&fit=crop&auto=format'},
+    {make:'Honda',model:'Civic',year:2023,type:'Sedan',price:24800,fuel:'Gas',img:'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=120&fit=crop&auto=format'},
+    {make:'BMW',model:'X5',year:2023,type:'SUV',price:68000,fuel:'Gas',img:'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400&h=120&fit=crop&auto=format'},
+    {make:'Tesla',model:'Model 3',year:2023,type:'Sedan',price:42990,fuel:'Electric',img:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&h=120&fit=crop&auto=format'},
+    {make:'Jeep',model:'Wrangler',year:2023,type:'SUV',price:44000,fuel:'Gas',img:'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400&h=120&fit=crop&auto=format'},
+    {make:'Chevrolet',model:'Tahoe',year:2022,type:'SUV',price:58000,fuel:'Gas',img:'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=400&h=120&fit=crop&auto=format'},
+    {make:'Mercedes',model:'C-Class',year:2023,type:'Sedan',price:62000,fuel:'Gas',img:'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400&h=120&fit=crop&auto=format'},
+    {make:'Audi',model:'Q5',year:2023,type:'SUV',price:55000,fuel:'Gas',img:'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400&h=120&fit=crop&auto=format'},
+    {make:'Ram',model:'1500',year:2023,type:'Truck',price:51000,fuel:'Gas',img:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=120&fit=crop&auto=format'},
+    {make:'Lexus',model:'RX 350',year:2023,type:'SUV',price:58500,fuel:'Gas',img:'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400&h=120&fit=crop&auto=format'},
+    {make:'Dodge',model:'Challenger',year:2023,type:'Coupe',price:48000,fuel:'Gas',img:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=120&fit=crop&auto=format'},
+    {make:'Volkswagen',model:'Golf GTI',year:2023,type:'Sedan',price:33500,fuel:'Gas',img:'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=120&fit=crop&auto=format'},
+    {make:'Tesla',model:'Model Y',year:2023,type:'SUV',price:52990,fuel:'Electric',img:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&h=120&fit=crop&auto=format'},
+    {make:'Subaru',model:'Outback',year:2022,type:'SUV',price:34800,fuel:'Gas',img:'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=400&h=120&fit=crop&auto=format'},
+    {make:'Porsche',model:'Macan',year:2023,type:'SUV',price:72000,fuel:'Gas',img:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=120&fit=crop&auto=format'},
+    {make:'Cadillac',model:'Escalade',year:2022,type:'SUV',price:89000,fuel:'Gas',img:'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400&h=120&fit=crop&auto=format'},
+    {make:'Kia',model:'Stinger',year:2022,type:'Coupe',price:38500,fuel:'Gas',img:'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=120&fit=crop&auto=format'},
+    {make:'Mazda',model:'CX-5',year:2023,type:'SUV',price:31000,fuel:'Gas',img:'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=400&h=120&fit=crop&auto=format'},
+    {make:'Lincoln',model:'Navigator',year:2023,type:'SUV',price:82000,fuel:'Gas',img:'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=400&h=120&fit=crop&auto=format'},
+    {make:'Acura',model:'MDX',year:2023,type:'SUV',price:54000,fuel:'Gas',img:'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400&h=120&fit=crop&auto=format'},
+    {make:'Volvo',model:'XC90',year:2023,type:'SUV',price:67000,fuel:'Hybrid',img:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400&h=120&fit=crop&auto=format'},
+    {make:'Hyundai',model:'Tucson',year:2023,type:'SUV',price:29500,fuel:'Hybrid',img:'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=400&h=120&fit=crop&auto=format'},
+    {make:'Genesis',model:'G70',year:2022,type:'Sedan',price:41000,fuel:'Gas',img:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=120&fit=crop&auto=format'},
+    {make:'Nissan',model:'Frontier',year:2022,type:'Truck',price:36000,fuel:'Gas',img:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=120&fit=crop&auto=format'},
+    {make:'Chevrolet',model:'Malibu',year:2022,type:'Sedan',price:26500,fuel:'Gas',img:'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400&h=120&fit=crop&auto=format'},
+];
+// Pick 30 cars unique to this dealer by rotating based on dealer ID
+const start = ((dealerId - 1) * 7) % allInventory.length;
+const inv = [...allInventory.slice(start), ...allInventory.slice(0, start)];
+document.getElementById('invGrid').innerHTML = inv.map((c, i) =>
+    `<div class="inv-card" style="animation-delay:${i*0.04}s">
+        <img class="inv-img" src="${c.img}" alt="${c.make} ${c.model}">
+        <div class="inv-body">
+            <div class="inv-name">${c.year} ${c.make} ${c.model}</div>
+            <div class="inv-sub">${c.type} · ${c.fuel}</div>
+            <div><span class="inv-price">$${c.price.toLocaleString()}</span><span class="inv-fuel">${c.fuel}</span></div>
+        </div>
+    </div>`
+).join('');
 </script>
 </body>
 </html>
