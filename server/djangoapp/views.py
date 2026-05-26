@@ -51,6 +51,17 @@ def add_review(request):
     return JsonResponse({'status': 403, 'message': 'Unauthorized'})
 
 
+def dealer_page(request, dealer_id):
+    return render(request, 'dealer_details.html', {'dealer_id': dealer_id})
+
+
+def add_review_page(request, dealer_id):
+    if request.user.is_anonymous:
+        return redirect(f'/?dealer_id={dealer_id}&action=review')
+    cars = CarModel.objects.select_related('car_make')
+    return render(request, 'add_review.html', {'dealer_id': dealer_id, 'cars': cars})
+
+
 def get_cars(request):
     car_models = CarModel.objects.select_related('car_make')
     cars = [

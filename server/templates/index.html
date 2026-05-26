@@ -376,7 +376,7 @@ async function loadDealers(state = 'All') {
                 <div class="dealer-address">${d.address}</div>
                 <div class="card-divider"></div>
                 <div class="card-actions">
-                    <button class="btn-details" onclick="window.location='/djangoapp/get_dealers/${d.id}/'">Details & Reviews</button>
+                    <button class="btn-details" onclick="window.location='/djangoapp/dealer/${d.id}/'">Details & Reviews</button>
                     ${username ? `<button class="btn-post-review">+ Review</button>` : ''}
                 </div>
             </div>`).join('');

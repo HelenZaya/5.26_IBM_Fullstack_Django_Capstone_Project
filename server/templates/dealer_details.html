@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealer Details — Cars Dealership</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #6366f1; --primary-dark: #4f46e5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0f0f1a; color: white; min-height: 100vh; }
+
+        .navbar {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 16px 60px;
+            background: rgba(15,15,26,0.9); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-brand { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .back-btn { padding: 8px 18px; border-radius: 10px; border: 1.5px solid rgba(99,102,241,0.4); color: #a78bfa; background: transparent; cursor: pointer; font-weight: 600; font-size: 0.85rem; font-family: 'Inter', sans-serif; text-decoration: none; transition: all 0.2s; }
+        .back-btn:hover { background: rgba(99,102,241,0.15); }
+
+        .page { padding: 110px 60px 60px; max-width: 1100px; margin: 0 auto; }
+
+        .dealer-hero {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px; padding: 36px; margin-bottom: 40px;
+            position: relative; overflow: hidden;
+        }
+        .dealer-hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #6366f1, #a78bfa, #f59e0b);
+        }
+        .dealer-hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .dealer-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
+        .dealer-title span { background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .rating-big { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3); padding: 8px 18px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; color: #fbbf24; }
+        .dealer-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+        .meta-item { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+        .meta-item strong { color: rgba(255,255,255,0.8); }
+
+        .review-btn-wrap { margin-bottom: 32px; }
+        .btn-add-review {
+            padding: 12px 28px; background: linear-gradient(135deg, #10b981, #059669); border: none;
+            border-radius: 12px; color: white; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.25s;
+            box-shadow: 0 6px 20px rgba(16,185,129,0.3); text-decoration: none; display: inline-block;
+        }
+        .btn-add-review:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(16,185,129,0.4); }
+
+        .section-label { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: rgba(255,255,255,0.9); }
+        .section-label span { background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .reviews-list { display: flex; flex-direction: column; gap: 16px; }
+        .review-card {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px; padding: 24px; transition: all 0.3s;
+            animation: fadeInUp 0.5s ease both;
+        }
+        .review-card:hover { border-color: rgba(99,102,241,0.25); transform: translateX(4px); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .reviewer-name { font-weight: 700; font-size: 0.95rem; }
+        .sentiment-badge {
+            padding: 3px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;
+        }
+        .sentiment-positive { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: #34d399; }
+        .sentiment-negative { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #f87171; }
+        .sentiment-neutral, .sentiment-unknown { background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); color: #a78bfa; }
+        .review-text { color: rgba(255,255,255,0.75); font-size: 0.9rem; line-height: 1.6; margin-bottom: 12px; }
+        .review-meta { display: flex; gap: 16px; font-size: 0.78rem; color: rgba(255,255,255,0.35); flex-wrap: wrap; }
+        .car-tag { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); padding: 2px 10px; border-radius: 8px; color: #a78bfa; font-weight: 600; }
+
+        .loading { text-align: center; padding: 60px; color: rgba(255,255,255,0.4); }
+        .spinner { width: 36px; height: 36px; border: 3px solid rgba(99,102,241,0.2); border-top-color: #6366f1; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .no-reviews { text-align: center; padding: 60px; color: rgba(255,255,255,0.35); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="navbar-brand" href="/">🚗 Cars Dealership</a>
+    <a href="/" class="back-btn">← Back to Dealers</a>
+</nav>
+
+<div class="page">
+    <div class="dealer-hero" id="dealerHero">
+        <div style="text-align:center;padding:40px;color:rgba(255,255,255,0.4);">
+            <div class="spinner"></div>Loading dealer info...
+        </div>
+    </div>
+
+    <div class="review-btn-wrap" id="reviewBtnWrap" style="display:none;"></div>
+
+    <div class="section-label">Customer <span>Reviews</span></div>
+    <div id="reviewsList" class="reviews-list">
+        <div class="loading"><div class="spinner"></div>Loading reviews...</div>
+    </div>
+</div>
+
+<script>
+const dealerId = {{ dealer_id }};
+const username = sessionStorage.getItem('username');
+
+async function loadDealer() {
+    const res = await fetch(`/djangoapp/get_dealers/${dealerId}/`);
+    const data = await res.json();
+    const d = data.dealer;
+    document.getElementById('dealerHero').innerHTML = `
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6366f1,#a78bfa,#f59e0b);"></div>
+        <div class="dealer-hero-top">
+            <div>
+                <div class="dealer-title"><span>${d.full_name}</span></div>
+            </div>
+            <div class="rating-big">⭐ ${d.rating}</div>
+        </div>
+        <div class="dealer-meta">
+            <div class="meta-item">📍 <strong>${d.city}, ${d.state} ${d.zip}</strong></div>
+            <div class="meta-item">🏢 <strong>${d.address}</strong></div>
+            <div class="meta-item">🆔 Dealer ID: <strong>${d.id}</strong></div>
+        </div>
+    `;
+    document.title = `${d.full_name} — Cars Dealership`;
+
+    if (username) {
+        document.getElementById('reviewBtnWrap').style.display = 'block';
+        document.getElementById('reviewBtnWrap').innerHTML =
+            `<a href="/djangoapp/dealer/${dealerId}/review/" class="btn-add-review">+ Write a Review</a>`;
+    }
+}
+
+async function loadReviews() {
+    const res = await fetch(`/djangoapp/get_dealers/${dealerId}/reviews/`);
+    const data = await res.json();
+    const reviews = data.reviews || [];
+    if (!reviews.length) {
+        document.getElementById('reviewsList').innerHTML = '<div class="no-reviews">No reviews yet. Be the first to review!</div>';
+        return;
+    }
+    document.getElementById('reviewsList').innerHTML = reviews.map((r, i) => {
+        const s = r.sentiment || 'unknown';
+        const sClass = s === 'positive' ? 'sentiment-positive' : s === 'negative' ? 'sentiment-negative' : 'sentiment-neutral';
+        const emoji = s === 'positive' ? '😊' : s === 'negative' ? '😞' : '😐';
+        return `
+        <div class="review-card" style="animation-delay:${i*0.08}s">
+            <div class="review-header">
+                <div class="reviewer-name">${r.name}</div>
+                <div class="sentiment-badge ${sClass}">${emoji} ${s}</div>
+            </div>
+            <div class="review-text">"${r.review}"</div>
+            <div class="review-meta">
+                <span class="car-tag">🚗 ${r.car_year} ${r.car_make} ${r.car_model}</span>
+                <span>📅 ${r.purchase_date}</span>
+                ${r.purchase ? '<span>✅ Verified Purchase</span>' : ''}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+loadDealer();
+loadReviews();
+</script>
+</body>
+</html>
