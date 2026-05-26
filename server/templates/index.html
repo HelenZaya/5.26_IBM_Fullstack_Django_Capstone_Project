@@ -188,6 +188,25 @@
 
         .no-dealers { text-align: center; padding: 60px; color: var(--text-muted); font-size: 1rem; }
 
+        /* CAR MARKETPLACE */
+        .market-section { padding: 20px 60px 80px; }
+        .market-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+        .market-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 4px; }
+        .car-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: all 0.3s; animation: cardFadeIn 0.5s ease both; cursor: pointer; }
+        .car-card:hover { transform: translateY(-6px); border-color: rgba(99,102,241,0.35); box-shadow: 0 16px 40px rgba(0,0,0,0.25); }
+        .car-img { width: 100%; height: 130px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .car-card-body { padding: 14px; }
+        .car-card-title { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .car-card-sub { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
+        .car-card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .car-price { font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .car-badge { font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: 8px; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.25); color: #a78bfa; }
+        .car-details { display: flex; gap: 8px; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 12px; flex-wrap: wrap; }
+        .car-detail-item { display: flex; align-items: center; gap: 3px; }
+        .btn-view-car { width: 100%; padding: 8px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; border-radius: 10px; color: white; font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+        .btn-view-car:hover { opacity: 0.88; transform: translateY(-1px); }
+        [data-theme="light"] .car-badge { background: rgba(99,102,241,0.12); }
+
         /* LIGHT MODE OVERRIDES */
         [data-theme="light"] .modal { background: #ffffff; border-color: rgba(99,102,241,0.2); }
         [data-theme="light"] .modal-title { background: linear-gradient(135deg, #4f46e5, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -380,6 +399,21 @@
     </div>
 </section>
 
+<!-- CAR MARKETPLACE -->
+<section class="market-section">
+    <div class="section-header">
+        <h2 class="section-title">Car <span>Marketplace</span></h2>
+        <div class="market-filters">
+            <button class="filter-btn active" onclick="filterMarket(this,'All')">All</button>
+            <button class="filter-btn" onclick="filterMarket(this,'Sedan')">Sedan</button>
+            <button class="filter-btn" onclick="filterMarket(this,'SUV')">SUV</button>
+            <button class="filter-btn" onclick="filterMarket(this,'Truck')">Truck</button>
+            <button class="filter-btn" onclick="filterMarket(this,'Coupe')">Coupe</button>
+        </div>
+    </div>
+    <div id="marketGrid" class="market-grid"></div>
+</section>
+
 <!-- LOGIN MODAL -->
 <div id="loginModal" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('show')">
     <div class="modal">
@@ -543,6 +577,80 @@ function setLanguage(lang) {
     document.getElementById('langSelect').value = saved;
     setLanguage(saved);
 })();
+
+// ── CAR MARKETPLACE ──
+const marketCars = [
+    {make:'Toyota',model:'Camry',year:2023,type:'Sedan',price:28500,miles:12000,color:'#3b82f6',fuel:'Hybrid',trans:'Auto'},
+    {make:'Honda',model:'CR-V',year:2023,type:'SUV',price:34200,miles:8500,color:'#6366f1',fuel:'Gas',trans:'Auto'},
+    {make:'Ford',model:'Mustang',year:2023,type:'Coupe',price:42000,miles:3200,color:'#ef4444',fuel:'Gas',trans:'Manual'},
+    {make:'Chevrolet',model:'Tahoe',year:2022,type:'SUV',price:58000,miles:22000,color:'#1e293b',fuel:'Gas',trans:'Auto'},
+    {make:'BMW',model:'3 Series',year:2023,type:'Sedan',price:47500,miles:6000,color:'#0f172a',fuel:'Gas',trans:'Auto'},
+    {make:'Toyota',model:'RAV4',year:2023,type:'SUV',price:32100,miles:15000,color:'#16a34a',fuel:'Hybrid',trans:'Auto'},
+    {make:'Ford',model:'F-150',year:2022,type:'Truck',price:45000,miles:28000,color:'#b45309',fuel:'Gas',trans:'Auto'},
+    {make:'Honda',model:'Civic',year:2023,type:'Sedan',price:24800,miles:9000,color:'#7c3aed',fuel:'Gas',trans:'Manual'},
+    {make:'BMW',model:'X5',year:2023,type:'SUV',price:68000,miles:4500,color:'#374151',fuel:'Gas',trans:'Auto'},
+    {make:'Chevrolet',model:'Malibu',year:2022,type:'Sedan',price:26500,miles:18000,color:'#dc2626',fuel:'Gas',trans:'Auto'},
+    {make:'Tesla',model:'Model 3',year:2023,type:'Sedan',price:42990,miles:1200,color:'#e2e8f0',fuel:'Electric',trans:'Auto'},
+    {make:'Hyundai',model:'Tucson',year:2023,type:'SUV',price:29500,miles:7800,color:'#0369a1',fuel:'Hybrid',trans:'Auto'},
+    {make:'Kia',model:'Stinger',year:2022,type:'Coupe',price:38500,miles:14000,color:'#1d4ed8',fuel:'Gas',trans:'Auto'},
+    {make:'Mazda',model:'CX-5',year:2023,type:'SUV',price:31000,miles:5500,color:'#be123c',fuel:'Gas',trans:'Auto'},
+    {make:'Jeep',model:'Wrangler',year:2023,type:'SUV',price:44000,miles:8200,color:'#15803d',fuel:'Gas',trans:'Manual'},
+    {make:'Ram',model:'1500',year:2023,type:'Truck',price:51000,miles:3600,color:'#1e3a5f',fuel:'Gas',trans:'Auto'},
+    {make:'Subaru',model:'Outback',year:2022,type:'SUV',price:34800,miles:20000,color:'#65a30d',fuel:'Gas',trans:'Auto'},
+    {make:'Volkswagen',model:'Golf GTI',year:2023,type:'Sedan',price:33500,miles:4100,color:'#4f46e5',fuel:'Gas',trans:'Manual'},
+    {make:'Audi',model:'Q5',year:2023,type:'SUV',price:55000,miles:6800,color:'#1c1917',fuel:'Gas',trans:'Auto'},
+    {make:'Mercedes',model:'C-Class',year:2023,type:'Sedan',price:62000,miles:2800,color:'#c0c0c0',fuel:'Gas',trans:'Auto'},
+    {make:'Nissan',model:'Frontier',year:2022,type:'Truck',price:36000,miles:16000,color:'#064e3b',fuel:'Gas',trans:'Manual'},
+    {make:'Lexus',model:'RX 350',year:2023,type:'SUV',price:58500,miles:5200,color:'#78350f',fuel:'Gas',trans:'Auto'},
+    {make:'Porsche',model:'Macan',year:2023,type:'SUV',price:72000,miles:1800,color:'#fbbf24',fuel:'Gas',trans:'Auto'},
+    {make:'Tesla',model:'Model Y',year:2023,type:'SUV',price:52990,miles:900,color:'#f1f5f9',fuel:'Electric',trans:'Auto'},
+    {make:'Genesis',model:'G70',year:2022,type:'Sedan',price:41000,miles:11000,color:'#312e81',fuel:'Gas',trans:'Auto'},
+    {make:'Dodge',model:'Challenger',year:2023,type:'Coupe',price:48000,miles:3900,color:'#7f1d1d',fuel:'Gas',trans:'Manual'},
+    {make:'Acura',model:'MDX',year:2023,type:'SUV',price:54000,miles:7200,color:'#1e40af',fuel:'Gas',trans:'Auto'},
+    {make:'Cadillac',model:'Escalade',year:2022,type:'SUV',price:89000,miles:12000,color:'#0f172a',fuel:'Gas',trans:'Auto'},
+    {make:'Lincoln',model:'Navigator',year:2023,type:'SUV',price:82000,miles:4800,color:'#1c1917',fuel:'Gas',trans:'Auto'},
+    {make:'Volvo',model:'XC90',year:2023,type:'SUV',price:67000,miles:6400,color:'#374151',fuel:'Hybrid',trans:'Auto'},
+];
+
+let marketFilter = 'All';
+function renderMarket(filter = 'All') {
+    const cars = filter === 'All' ? marketCars : marketCars.filter(c => c.type === filter);
+    document.getElementById('marketGrid').innerHTML = cars.map((c, i) => `
+        <div class="car-card" style="animation-delay:${(i % 15) * 0.05}s">
+            <div class="car-img" style="background:linear-gradient(135deg,${c.color}22,${c.color}44)">
+                <svg viewBox="0 0 180 80" width="160" height="70" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="20" y="38" width="140" height="28" rx="8" fill="${c.color}" opacity="0.9"/>
+                    <path d="M38 38 Q44 18 58 14 L122 14 Q136 18 142 38Z" fill="${c.color}" opacity="0.75"/>
+                    <path d="M52 36 Q56 20 64 16 L100 16 Q114 20 118 36Z" fill="rgba(147,197,253,0.3)"/>
+                    <circle cx="55" cy="66" r="12" fill="#1e1b4b" stroke="${c.color}" stroke-width="2.5"/>
+                    <circle cx="55" cy="66" r="5" fill="${c.color}"/>
+                    <circle cx="125" cy="66" r="12" fill="#1e1b4b" stroke="${c.color}" stroke-width="2.5"/>
+                    <circle cx="125" cy="66" r="5" fill="${c.color}"/>
+                    <ellipse cx="148" cy="50" rx="7" ry="4" fill="rgba(253,224,71,0.85)"/>
+                    <rect x="22" y="46" width="6" height="8" rx="2" fill="rgba(239,68,68,0.8)"/>
+                </svg>
+            </div>
+            <div class="car-card-body">
+                <div class="car-card-title">${c.year} ${c.make} ${c.model}</div>
+                <div class="car-card-sub">${c.type} · ${c.trans}</div>
+                <div class="car-card-meta">
+                    <div class="car-price">$${c.price.toLocaleString()}</div>
+                    <div class="car-badge">${c.fuel}</div>
+                </div>
+                <div class="car-details">
+                    <div class="car-detail-item">🛣️ ${c.miles.toLocaleString()} mi</div>
+                    <div class="car-detail-item">📅 ${c.year}</div>
+                </div>
+                <button type="button" class="btn-view-car">View Details</button>
+            </div>
+        </div>`).join('');
+}
+function filterMarket(btn, type) {
+    document.querySelectorAll('.market-filters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderMarket(type);
+}
+renderMarket();
 
 loadDealers();
 </script>
