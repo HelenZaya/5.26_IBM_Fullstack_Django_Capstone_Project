@@ -1,0 +1,36 @@
+name: CI Linting
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  python-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install flake8
+        run: pip install flake8
+      - name: Run flake8
+        run: flake8 server/ --max-line-length=120 --exclude=server/staticfiles,server/migrations --ignore=E501,W503
+        continue-on-error: true
+
+  javascript-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install JSHint
+        run: npm install -g jshint
+      - name: Run JSHint
+        run: jshint server/database/app.js --esversion=8
+        continue-on-error: true
