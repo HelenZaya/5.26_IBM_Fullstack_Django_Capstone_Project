@@ -14,8 +14,8 @@ class CarMakeAdmin(admin.ModelAdmin):
 
 
 class CarModelAdmin(admin.ModelAdmin):
-    list_display = ['name', 'car_make', 'car_type', 'year', 'dealer_id']
-    list_filter = ['car_make', 'car_type', 'year']
+    list_display = ['name', 'car_make']
+    list_filter = ['car_make']
     search_fields = ['name', 'car_make__name']
 
 
