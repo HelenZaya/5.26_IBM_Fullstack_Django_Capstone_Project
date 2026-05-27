@@ -1,4 +1,4 @@
-# Full Stack Application Development Capstone Project
+# xrwvm-fullstack_developer_capstone
 
 **Project Name:** Cars Dealership Portal  
 **Developer:** Buyanzaya Shijir  

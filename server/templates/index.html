@@ -486,10 +486,11 @@ function renderCards(dealers, t) {
             </div>
             <div class="dealer-location">📍 ${d.city}, ${d.state} ${d.zip}</div>
             <div class="dealer-address">${d.address}</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:12px;">Dealer ID: ${d.id}</div>
             <div class="card-divider"></div>
             <div class="card-actions">
                 <a href="/djangoapp/dealer/${d.id}/" class="btn-details">${t.btn_details || 'Details & Reviews'}</a>
-                ${username ? `<a href="/djangoapp/dealer/${d.id}/review/" class="btn-post-review" style="text-decoration:none;display:block;text-align:center;">${t.btn_review || '+ Review'}</a>` : ''}
+                ${username ? `<a href="/djangoapp/dealer/${d.id}/review/" class="btn-post-review" style="text-decoration:none;display:block;text-align:center;">${t.btn_review || 'Review Dealer'}</a>` : ''}
             </div>
         </div>`).join('');
     window._cachedDealers = dealers;
@@ -499,6 +500,11 @@ function setFilter(btn, state) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('dealerList').innerHTML = '<div class="skeleton"></div>'.repeat(6);
+    if (state === 'All') {
+        history.pushState(null, '', window.location.pathname);
+    } else {
+        history.pushState(null, '', '?state=' + state);
+    }
     loadDealers(state);
 }
 
@@ -542,7 +548,7 @@ function toggleTheme() {
 // ── LANGUAGE ──
 const i18n = {
     mn: { nav_home:'Нүүр', nav_about:'Бидний тухай', nav_contact:'Холбоо барих', hero_tag:'⚡ Америкийн #1 Дилерийн Сүлжээ', hero_title:'Улс даяар <span>Хамгийн Тохиромжтой Дилерийг</span> Олоорой', hero_sub:'500 гаруй найдвартай дилерийн газрыг үзэж, үнэ харьцуулж, сэтгэгдэл уншаарай.', btn_browse:'Дилерүүдийг харах', btn_join:'Үнэгүй нэгдэх', btn_details:'Дэлгэрэнгүй & Сэтгэгдэл', btn_review:'+ Сэтгэгдэл', section_all:'Бүгд', section_dealers:'Дилерийн Газар', state_all:'Бүх муж', state_il:'Иллинойс', state_ks:'Канзас', state_tx:'Техас', state_ca:'Калифорни' },
-    en: { nav_home:'Home', nav_about:'About', nav_contact:'Contact', hero_tag:'⚡ America\'s #1 Dealer Network', hero_title:'Find Your <span>Perfect Dealer</span> Across the Nation', hero_sub:'Browse 500+ trusted dealerships nationwide. Compare prices, read reviews, and drive away happy.', btn_browse:'Browse Dealers', btn_join:'Join Free', btn_details:'Details & Reviews', btn_review:'+ Review', section_all:'All', section_dealers:'Dealerships', state_all:'All States', state_il:'Illinois', state_ks:'Kansas', state_tx:'Texas', state_ca:'California' },
+    en: { nav_home:'Home', nav_about:'About', nav_contact:'Contact', hero_tag:'⚡ America\'s #1 Dealer Network', hero_title:'Find Your <span>Perfect Dealer</span> Across the Nation', hero_sub:'Browse 500+ trusted dealerships nationwide. Compare prices, read reviews, and drive away happy.', btn_browse:'Browse Dealers', btn_join:'Join Free', btn_details:'Details & Reviews', btn_review:'Review Dealer', section_all:'All', section_dealers:'Dealerships', state_all:'All States', state_il:'Illinois', state_ks:'Kansas', state_tx:'Texas', state_ca:'California' },
     de: { nav_home:'Startseite', nav_about:'Über uns', nav_contact:'Kontakt', hero_tag:'⚡ Amerikas Nr.1 Händlernetz', hero_title:'Finden Sie Ihren <span>perfekten Händler</span> in ganz Amerika', hero_sub:'Durchsuchen Sie 500+ vertrauenswürdige Händler. Preise vergleichen, Bewertungen lesen.', btn_browse:'Händler durchsuchen', btn_join:'Kostenlos beitreten', btn_details:'Details & Bewertungen', btn_review:'+ Bewertung', section_all:'Alle', section_dealers:'Autohändler', state_all:'Alle Bundesstaaten', state_il:'Illinois', state_ks:'Kansas', state_tx:'Texas', state_ca:'Kalifornien' },
     ja: { nav_home:'ホーム', nav_about:'私たちについて', nav_contact:'お問い合わせ', hero_tag:'⚡ アメリカNo.1ディーラーネット', hero_title:'全国で<span>最高のディーラー</span>を見つけよう', hero_sub:'全国500以上の信頼できるディーラーを検索。価格比較、レビュー確認後、満足してドライブ。', btn_browse:'ディーラーを見る', btn_join:'無料登録', btn_details:'詳細 & レビュー', btn_review:'+ レビュー', section_all:'すべて', section_dealers:'ディーラー', state_all:'全州', state_il:'イリノイ州', state_ks:'カンザス州', state_tx:'テキサス州', state_ca:'カリフォルニア州' },
     ko: { nav_home:'홈', nav_about:'소개', nav_contact:'문의', hero_tag:'⚡ 미국 1위 딜러 네트워크', hero_title:'전국에서 <span>완벽한 딜러</span>를 찾아보세요', hero_sub:'전국 500개 이상의 신뢰할 수 있는 딜러십을 검색하세요. 가격 비교, 리뷰 확인.', btn_browse:'딜러 보기', btn_join:'무료 가입', btn_details:'상세정보 & 리뷰', btn_review:'+ 리뷰', section_all:'전체', section_dealers:'딜러십', state_all:'전체 주', state_il:'일리노이', state_ks:'캔자스', state_tx:'텍사스', state_ca:'캘리포니아' },

@@ -7,16 +7,16 @@ app.use(cors());
 app.use(express.json());
 
 const dealers = [
-    { id: 1, full_name: 'Sunshine Toyota', city: 'Chicago', state: 'Illinois', zip: '60601', address: '1234 Lake Shore Dr', rating: 4.8 },
-    { id: 2, full_name: 'Midwest Motors Ford', city: 'Springfield', state: 'Illinois', zip: '62701', address: '567 Capitol Ave', rating: 4.5 },
-    { id: 3, full_name: 'Prairie Honda', city: 'Naperville', state: 'Illinois', zip: '60540', address: '890 Aurora Ave', rating: 4.7 },
-    { id: 4, full_name: 'Great Plains Chevrolet', city: 'Wichita', state: 'Kansas', zip: '67201', address: '321 Main St', rating: 4.6 },
-    { id: 5, full_name: 'Sunflower BMW', city: 'Overland Park', state: 'Kansas', zip: '66210', address: '456 College Blvd', rating: 4.9 },
-    { id: 6, full_name: 'Heartland Toyota', city: 'Topeka', state: 'Kansas', zip: '66601', address: '789 Washburn Ave', rating: 4.4 },
-    { id: 7, full_name: 'Lone Star Ford', city: 'Houston', state: 'Texas', zip: '77001', address: '100 Main St', rating: 4.7 },
-    { id: 8, full_name: 'Bayou Honda', city: 'Dallas', state: 'Texas', zip: '75201', address: '200 Commerce St', rating: 4.5 },
-    { id: 9, full_name: 'Pacific Honda', city: 'Los Angeles', state: 'California', zip: '90001', address: '300 Wilshire Blvd', rating: 4.6 },
-    { id: 10, full_name: 'Golden Gate Toyota', city: 'San Francisco', state: 'California', zip: '94102', address: '400 Market St', rating: 4.8 },
+    { id: 1, full_name: 'Sunshine Toyota', short_name: 'Sunshine', city: 'Chicago', state: 'Illinois', zip: '60601', address: '1234 Lake Shore Dr', lat: 41.8781, long: -87.6298, rating: 4.8 },
+    { id: 2, full_name: 'Midwest Motors Ford', short_name: 'Midwest', city: 'Springfield', state: 'Illinois', zip: '62701', address: '567 Capitol Ave', lat: 39.7817, long: -89.6501, rating: 4.5 },
+    { id: 3, full_name: 'Prairie Honda', short_name: 'Prairie', city: 'Naperville', state: 'Illinois', zip: '60540', address: '890 Aurora Ave', lat: 41.7508, long: -88.1535, rating: 4.7 },
+    { id: 4, full_name: 'Great Plains Chevrolet', short_name: 'Great Plains', city: 'Wichita', state: 'Kansas', zip: '67201', address: '321 Main St', lat: 37.6872, long: -97.3301, rating: 4.6 },
+    { id: 5, full_name: 'Sunflower BMW', short_name: 'Sunflower', city: 'Overland Park', state: 'Kansas', zip: '66210', address: '456 College Blvd', lat: 38.9822, long: -94.6708, rating: 4.9 },
+    { id: 6, full_name: 'Heartland Toyota', short_name: 'Heartland', city: 'Topeka', state: 'Kansas', zip: '66601', address: '789 Washburn Ave', lat: 39.0558, long: -95.6894, rating: 4.4 },
+    { id: 7, full_name: 'Lone Star Ford', short_name: 'Lone Star', city: 'Houston', state: 'Texas', zip: '77001', address: '100 Main St', lat: 29.7604, long: -95.3698, rating: 4.7 },
+    { id: 8, full_name: 'Bayou Honda', short_name: 'Bayou', city: 'Dallas', state: 'Texas', zip: '75201', address: '200 Commerce St', lat: 32.7767, long: -96.7970, rating: 4.5 },
+    { id: 9, full_name: 'Pacific Honda', short_name: 'Pacific', city: 'Los Angeles', state: 'California', zip: '90001', address: '300 Wilshire Blvd', lat: 34.0522, long: -118.2437, rating: 4.6 },
+    { id: 10, full_name: 'Golden Gate Toyota', short_name: 'Golden Gate', city: 'San Francisco', state: 'California', zip: '94102', address: '400 Market St', lat: 37.7749, long: -122.4194, rating: 4.8 },
 ];
 
 const reviews = [
