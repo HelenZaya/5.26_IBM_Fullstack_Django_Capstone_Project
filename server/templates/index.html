@@ -143,7 +143,7 @@
         .dealer-card::before {
             content: ''; position: absolute; inset: 0; border-radius: 20px;
             background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.04));
-            opacity: 0; transition: opacity 0.3s;
+            opacity: 0; transition: opacity 0.3s; pointer-events: none;
         }
         .dealer-card:hover { transform: translateY(-8px) scale(1.01); border-color: var(--card-border-h); box-shadow: 0 20px 50px rgba(0,0,0,0.25), 0 0 0 1px rgba(99,102,241,0.2); }
         .dealer-card:hover::before { opacity: 1; }
@@ -155,7 +155,7 @@
         .dealer-address { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 20px; opacity: 0.7; }
         .card-divider { height: 1px; background: var(--border); margin-bottom: 18px; }
         .card-actions { display: flex; gap: 10px; }
-        .btn-details { flex: 1; padding: 10px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; border-radius: 10px; color: white; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+        .btn-details { flex: 1; padding: 10px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; border-radius: 10px; color: white; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; text-decoration: none; display: block; text-align: center; position: relative; z-index: 1; }
         .btn-details:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-post-review { flex: 1; padding: 10px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); border-radius: 10px; color: #34d399; font-size: 0.85rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
         .btn-post-review:hover { background: rgba(16,185,129,0.25); transform: translateY(-1px); }
@@ -488,8 +488,8 @@ function renderCards(dealers, t) {
             <div class="dealer-address">${d.address}</div>
             <div class="card-divider"></div>
             <div class="card-actions">
-                <button class="btn-details" onclick="window.location='/djangoapp/dealer/${d.id}/'">${t.btn_details || 'Details & Reviews'}</button>
-                ${username ? `<button class="btn-post-review" onclick="window.location='/djangoapp/dealer/${d.id}/review/'">${t.btn_review || '+ Review'}</button>` : ''}
+                <a href="/djangoapp/dealer/${d.id}/" class="btn-details">${t.btn_details || 'Details & Reviews'}</a>
+                ${username ? `<a href="/djangoapp/dealer/${d.id}/review/" class="btn-post-review" style="text-decoration:none;display:block;text-align:center;">${t.btn_review || '+ Review'}</a>` : ''}
             </div>
         </div>`).join('');
     window._cachedDealers = dealers;
