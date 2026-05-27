@@ -1,0 +1,66 @@
+services:
+
+  mongodb:
+    image: mongo:6.0
+    container_name: 5.26_IBM_Fullstack_Django_Capstone_Project_DB
+    restart: unless-stopped
+    ports:
+      - "27020:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+    volumes:
+      - capstone_mongo_data:/data/db
+    networks:
+      - capstone_net
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: 5.26_IBM_Fullstack_Django_Capstone_Project_MongoExpress
+    restart: unless-stopped
+    ports:
+      - "8090:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password123
+      ME_CONFIG_MONGODB_URL: mongodb://admin:password123@5.26_IBM_Fullstack_Django_Capstone_Project_DB:27017/
+      ME_CONFIG_BASICAUTH: "false"
+    depends_on:
+      - mongodb
+    networks:
+      - capstone_net
+
+  dealer-db:
+    build:
+      context: ./server/database
+      dockerfile: Dockerfile
+    container_name: 5.26_IBM_Fullstack_Django_Capstone_Project_DealerDB
+    restart: unless-stopped
+    ports:
+      - "3031:3030"
+    networks:
+      - capstone_net
+
+  django-app:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: 5.26_IBM_Fullstack_Django_Capstone_Project
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+    environment:
+      - backend_url=http://5.26_IBM_Fullstack_Django_Capstone_Project_DealerDB:3030
+      - sentiment_analyzer_url=http://localhost:5050
+      - DJANGO_SETTINGS_MODULE=djangoproj.settings
+    depends_on:
+      - dealer-db
+    networks:
+      - capstone_net
+
+volumes:
+  capstone_mongo_data:
+
+networks:
+  capstone_net:
+    name: capstone_net
